@@ -24,6 +24,10 @@ func TestWaitGroupWithIDs(t *testing.T) {
 		}()
 
 		wg.Wait()
+		l0 := wg.ListProcesses()
+		if len(l0) != 0 {
+			t.Fatalf("Expected 0 waiters, got %d", len(l0))
+		}
 	})
 
 	t.Run("Wait with remaining workers", func(t *testing.T) {
@@ -47,9 +51,9 @@ func TestWaitGroupWithIDs(t *testing.T) {
 			wg.Wait()
 		}()
 		iWg.Wait()
-		l1 := wg.ListWaiters()
+		l1 := wg.ListProcesses()
 		time.Sleep(time.Millisecond * 20)
-		l2 := wg.ListWaiters()
+		l2 := wg.ListProcesses()
 		if len(l1) != 1 {
 			t.Fatalf("Expected 1 waiter, got %d", len(l1))
 		}
@@ -76,7 +80,6 @@ func TestWaitGroupWithIDs(t *testing.T) {
 			}(fmt.Sprintf("worker%d", i))
 		}
 		wg2.Wait()
-
 		wg.Wait()
 	})
 }

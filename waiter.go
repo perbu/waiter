@@ -11,6 +11,7 @@ type WaitGroupWithIDs struct {
 	wg  sync.WaitGroup
 }
 
+// Add adds an id to the wait group.
 func (wg *WaitGroupWithIDs) Add(id string) {
 	wg.mu.Lock()
 	defer wg.mu.Unlock()
@@ -25,6 +26,7 @@ func (wg *WaitGroupWithIDs) Add(id string) {
 	wg.wg.Add(1)
 }
 
+// Done removes an id from the wait group. It will panic if the id does not exist.
 func (wg *WaitGroupWithIDs) Done(id string) {
 	wg.mu.Lock()
 	defer wg.mu.Unlock()
@@ -35,7 +37,8 @@ func (wg *WaitGroupWithIDs) Done(id string) {
 	wg.wg.Done()
 }
 
-func (wg *WaitGroupWithIDs) ListWaiters() []string {
+// ListProcesses returns a list of the ids of the processes that are still running.
+func (wg *WaitGroupWithIDs) ListProcesses() []string {
 	wg.mu.Lock()
 	defer wg.mu.Unlock()
 	waiters := make([]string, 0, len(wg.ids))
@@ -45,6 +48,7 @@ func (wg *WaitGroupWithIDs) ListWaiters() []string {
 	return waiters
 }
 
+// Wait waits for all the processes to finish
 func (wg *WaitGroupWithIDs) Wait() {
 	wg.wg.Wait()
 }
