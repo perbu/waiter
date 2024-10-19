@@ -3,6 +3,8 @@
 Package waiter provides a wrapper around `sync.WaitGroup` that allows to 
 figure out which workers are still waiting.
 
+This can make it easier to debug issues when there is one worker process that isn't ending.
+
 ## Usage
 
 ```go
